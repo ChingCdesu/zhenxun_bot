@@ -1,0 +1,1 @@
+create database zhenxun_bot;

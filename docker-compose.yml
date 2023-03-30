@@ -1,0 +1,41 @@
+version: '3'
+services:
+  zhenxun_bot:
+    image: zhenxun_bot:dev
+    restart: always
+    environment:
+      - HOST=0.0.0.0
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./zhenxun.config.py:/app/zhenxun_bot/configs/config.py
+      - ./zhenxun.config.yaml:/app/zhenxun_bot/configs/config.yaml
+      - ./data:/app/zhenxun_bot/data
+    # healthcheck:
+    #   test: curl --fail http://localhost:8080/onebot/v11 || exit 1
+    #   interval: 1m30s
+    #   timeout: 30s
+    #   retries: 5
+    #   start_period: 30s
+  db:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: Q8aK4pqnoXF92HduP06z
+    volumes:
+      - ./db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  go-cqhttp:
+    image: ghcr.io/mrs4s/go-cqhttp:1.0.0-rc5
+    restart: always
+    # depends_on:
+    #   zhenxun_bot:
+    #     condition: service_healthy
+    volumes:
+      - ./go-cqhttp.config.yml:/data/config.yml
