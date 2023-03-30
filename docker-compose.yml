@@ -1,7 +1,7 @@
 version: '3'
 services:
   zhenxun_bot:
-    image: zhenxun_bot:dev
+    build: .
     restart: always
     environment:
       - HOST=0.0.0.0
