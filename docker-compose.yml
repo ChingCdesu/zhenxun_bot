@@ -1,7 +1,7 @@
 version: '3'
 services:
   zhenxun_bot:
-    build: .
+    image: ghcr.io/chingcdesu/zhenxun_bot:latest
     restart: always
     env_file:
       - .env
