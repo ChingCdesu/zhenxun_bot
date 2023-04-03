@@ -3,10 +3,12 @@ services:
   zhenxun_bot:
     build: .
     restart: always
+    env_file:
+      - .env
     environment:
       - HOST=0.0.0.0
     depends_on:
-      db:
+      postgresql:
         condition: service_healthy
     volumes:
       - ./zhenxun.config.py:/app/zhenxun_bot/configs/config.py
@@ -18,11 +20,11 @@ services:
     #   timeout: 30s
     #   retries: 5
     #   start_period: 30s
-  db:
+  postgresql:
     image: postgres:alpine
     restart: always
-    environment:
-      POSTGRES_PASSWORD: Q8aK4pqnoXF92HduP06z
+    env_file:
+      - .env
     volumes:
       - ./db:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
